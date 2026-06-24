@@ -90,6 +90,57 @@
         {
           "key": "PLUGINS_PATH",
           "value": "/app/data/plugins"
+        },
+        {
+          "key": "DATABASE_HOST",
+          "fromDatabase": {
+            "name": "openwa-db",
+            "property": "host"
+          }
+        },
+        {
+          "key": "DATABASE_PORT",
+          "fromDatabase": {
+            "name": "openwa-db",
+            "property": "port"
+          }
+        },
+        {
+          "key": "DATABASE_USERNAME",
+          "fromDatabase": {
+            "name": "openwa-db",
+            "property": "user"
+          }
+        },
+        {
+          "key": "DATABASE_PASSWORD",
+          "fromDatabase": {
+            "name": "openwa-db",
+            "property": "password"
+          }
+        },
+        {
+          "key": "DATABASE_NAME",
+          "fromDatabase": {
+            "name": "openwa-db",
+            "property": "databaseName"
+          }
+        },
+        {
+          "key": "REDIS_HOST",
+          "fromService": {
+            "type": "redis",
+            "name": "openwa-redis",
+            "property": "host"
+          }
+        },
+        {
+          "key": "REDIS_PORT",
+          "fromService": {
+            "type": "redis",
+            "name": "openwa-redis",
+            "property": "port"
+          }
         }
       ],
       "autoDeploy": true,
@@ -98,22 +149,22 @@
       "previewPlans": "standard"
     },
     {
-      "type": "pserv",
+      "type": "redis",
+      "name": "openwa-redis",
+      "plan": "standard",
+      "region": "ohio",
+      "ipAllowList": []
+    }
+  ],
+  "databases": [
+    {
       "name": "openwa-db",
-      "env": "postgres",
       "plan": "standard",
       "region": "ohio",
       "ipAllowList": [],
       "databaseName": "openwa",
       "user": "openwa",
       "previewPlan": false
-    },
-    {
-      "type": "redis",
-      "name": "openwa-redis",
-      "plan": "standard",
-      "region": "ohio",
-      "ipAllowList": []
     }
   ],
   "env": {
