@@ -1,0 +1,41 @@
+services:
+  - type: web
+    name: openwa-api
+    env: node
+    plan: standard
+    buildCommand: npm install && npm run build
+    startCommand: node dist/main.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 2785
+      - key: DATABASE_TYPE
+        value: postgres
+      - key: ENGINE_TYPE
+        value: whatsapp-web.js
+      - key: PUPPETEER_HEADLESS
+        value: 'true'
+      - key: PUPPETEER_ARGS
+        value: '--no-sandbox,--disable-setuid-sandbox,--disable-dev-shm-usage,--disable-gpu'
+      - key: LOG_LEVEL
+        value: info
+      - key: DATABASE_SYNCHRONIZE
+        value: 'false'
+      - fromGroup: openwa
+    region: ohio
+    maxInstances: 3
+    healthCheckPath: /health
+
+  - type: redis
+    name: openwa-redis
+    plan: standard
+    region: ohio
+
+  - type: pserv
+    name: openwa-db
+    env: postgres
+    plan: standard
+    region: ohio
+    dbName: openwa
+    user: openwa
