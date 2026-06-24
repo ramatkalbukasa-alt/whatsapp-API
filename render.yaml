@@ -70,7 +70,7 @@ services:
       - key: DATABASE_NAME
         fromDatabase:
           name: openwa-db
-          property: databaseName
+          property: database
       - key: REDIS_HOST
         fromService:
           type: redis
@@ -87,6 +87,7 @@ services:
     name: openwa-redis
     plan: standard
     region: ohio
+    ipAllowList: []
 
 databases:
   # PostgreSQL Database
