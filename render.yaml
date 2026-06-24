@@ -3,7 +3,7 @@ services:
   - type: web
     name: openwa-api
     env: node
-    buildCommand: npm install && npm run build
+    buildCommand: npm install --include=dev && npm run build
     startCommand: node dist/main.js
     healthCheckPath: /health
     region: ohio
