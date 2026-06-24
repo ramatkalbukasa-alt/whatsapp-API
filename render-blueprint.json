@@ -5,7 +5,7 @@
       "type": "web",
       "name": "openwa-api",
       "env": "node",
-      "plan": "standard",
+      "plan": "free",
       "region": "ohio",
       "buildCommand": "npm install && npm run build",
       "startCommand": "node dist/main.js",
@@ -125,49 +125,20 @@
             "name": "openwa-db",
             "property": "database"
           }
-        },
-        {
-          "key": "REDIS_HOST",
-          "fromService": {
-            "type": "redis",
-            "name": "openwa-redis",
-            "property": "host"
-          }
-        },
-        {
-          "key": "REDIS_PORT",
-          "fromService": {
-            "type": "redis",
-            "name": "openwa-redis",
-            "property": "port"
-          }
         }
       ],
       "autoDeploy": true,
       "branch": "main",
-      "repo": "https://github.com/ramatkalbukasa-alt/whatsapp-API.git",
-      "previewPlans": "standard"
-    },
-    {
-      "type": "redis",
-      "name": "openwa-redis",
-      "plan": "standard",
-      "region": "ohio",
-      "ipAllowList": []
+      "repo": "https://github.com/ramatkalbukasa-alt/whatsapp-API.git"
     }
   ],
   "databases": [
     {
       "name": "openwa-db",
-      "plan": "standard",
+      "plan": "free",
       "region": "ohio",
-      "ipAllowList": [],
       "databaseName": "openwa",
-      "user": "openwa",
-      "previewPlan": false
+      "user": "openwa"
     }
-  ],
-  "env": {
-    "OPENWA_ENVIRONMENT": "production"
-  }
+  ]
 }

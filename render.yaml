@@ -7,7 +7,7 @@ services:
     startCommand: node dist/main.js
     healthCheckPath: /health
     region: ohio
-    plan: standard
+    plan: free
     autoDeploy: true
     branch: main
     envVars:
@@ -71,28 +71,11 @@ services:
         fromDatabase:
           name: openwa-db
           property: database
-      - key: REDIS_HOST
-        fromService:
-          type: redis
-          name: openwa-redis
-          property: host
-      - key: REDIS_PORT
-        fromService:
-          type: redis
-          name: openwa-redis
-          property: port
-
-  # Redis Cache
-  - type: redis
-    name: openwa-redis
-    plan: standard
-    region: ohio
-    ipAllowList: []
 
 databases:
-  # PostgreSQL Database
+  # PostgreSQL Database (free tier - 1GB, 90 days)
   - name: openwa-db
-    plan: standard
+    plan: free
     region: ohio
     databaseName: openwa
     user: openwa
