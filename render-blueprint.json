@@ -1,0 +1,122 @@
+{
+  "$schema": "https://render.com/deploy?secret=secret",
+  "services": [
+    {
+      "type": "web",
+      "name": "openwa-api",
+      "env": "node",
+      "plan": "standard",
+      "region": "ohio",
+      "buildCommand": "npm install && npm run build",
+      "startCommand": "node dist/main.js",
+      "healthCheckPath": "/health",
+      "envVars": [
+        {
+          "key": "NODE_ENV",
+          "value": "production"
+        },
+        {
+          "key": "PORT",
+          "value": "2785"
+        },
+        {
+          "key": "LOG_LEVEL",
+          "value": "info"
+        },
+        {
+          "key": "DATABASE_TYPE",
+          "value": "postgres"
+        },
+        {
+          "key": "DATABASE_SYNCHRONIZE",
+          "value": "false"
+        },
+        {
+          "key": "ENGINE_TYPE",
+          "value": "whatsapp-web.js"
+        },
+        {
+          "key": "SESSION_DATA_PATH",
+          "value": "/app/data/sessions"
+        },
+        {
+          "key": "PUPPETEER_HEADLESS",
+          "value": "true"
+        },
+        {
+          "key": "PUPPETEER_ARGS",
+          "value": "--no-sandbox,--disable-setuid-sandbox,--disable-dev-shm-usage,--disable-gpu"
+        },
+        {
+          "key": "STORAGE_TYPE",
+          "value": "local"
+        },
+        {
+          "key": "STORAGE_PATH",
+          "value": "/app/data/media"
+        },
+        {
+          "key": "CORS_ORIGINS",
+          "value": "*"
+        },
+        {
+          "key": "RATE_LIMIT_MAX",
+          "value": "100"
+        },
+        {
+          "key": "RATE_LIMIT_WINDOW",
+          "value": "900000"
+        },
+        {
+          "key": "DASHBOARD_ENABLED",
+          "value": "true"
+        },
+        {
+          "key": "DASHBOARD_PORT",
+          "value": "3000"
+        },
+        {
+          "key": "WEBHOOK_RETRIES",
+          "value": "3"
+        },
+        {
+          "key": "WEBHOOK_RETRY_DELAY",
+          "value": "5000"
+        },
+        {
+          "key": "PLUGINS_ENABLED",
+          "value": "true"
+        },
+        {
+          "key": "PLUGINS_PATH",
+          "value": "/app/data/plugins"
+        }
+      ],
+      "autoDeploy": true,
+      "branch": "main",
+      "repo": "https://github.com/ramatkalbukasa-alt/whatsapp-API.git",
+      "previewPlans": "standard"
+    },
+    {
+      "type": "pserv",
+      "name": "openwa-db",
+      "env": "postgres",
+      "plan": "standard",
+      "region": "ohio",
+      "ipAllowList": [],
+      "databaseName": "openwa",
+      "user": "openwa",
+      "previewPlan": false
+    },
+    {
+      "type": "redis",
+      "name": "openwa-redis",
+      "plan": "standard",
+      "region": "ohio",
+      "ipAllowList": []
+    }
+  ],
+  "env": {
+    "OPENWA_ENVIRONMENT": "production"
+  }
+}

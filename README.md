@@ -129,7 +129,25 @@ npm run dev
 
 ---
 
-## 🏭 Production Deployment
+## ☁️ Deploy to Production
+
+### 🚀 One-Click Deploy to Render (Recommended)
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/ramatkalbukasa-alt/whatsapp-API)
+
+**What it includes:**
+- ✅ Web Service (Node.js 22)
+- ✅ PostgreSQL Database
+- ✅ Redis Cache
+- ✅ Auto-scaling & monitoring
+- ✅ HTTPS & health checks
+- ✅ Auto-deploy on push
+
+👉 [See full Render deployment guide →](RENDER_DEPLOYMENT.md)
+
+---
+
+## 🏭 Production Deployment (Docker)
 
 For production, use the main `docker-compose.yml` with optional services:
 
