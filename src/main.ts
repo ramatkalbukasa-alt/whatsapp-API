@@ -155,6 +155,9 @@ async function bootstrap() {
     .setDescription('Open Source WhatsApp API Gateway - Free, Self-Hosted HTTP API')
     .setVersion('0.1.6')
     .addApiKey({ type: 'apiKey', name: 'X-API-Key', in: 'header' }, 'X-API-Key')
+    .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'API Key' }, 'Bearer')
+    .addSecurityRequirements('X-API-Key')
+    .addSecurityRequirements('Bearer')
     .addTag('sessions', 'WhatsApp session management')
     .addTag('messages', 'Send and manage messages')
     .addTag('webhooks', 'Webhook configuration')
@@ -166,7 +169,11 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document);
+  SwaggerModule.setup('api/docs', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  });
 
   const port = parseInt(process.env.PORT || '2785', 10);
   const host = process.env.HOST || '0.0.0.0';
