@@ -81,6 +81,7 @@ function setupDashboard(app: NestExpressApplication): boolean {
   app.useStaticAssets(dashboardDistPath, {
     prefix: '/dashboard/',
   });
+  console.log('[Bootstrap] Dashboard served from:', dashboardDistPath);
 
   const expressApp = app.getHttpAdapter().getInstance();
   expressApp.get(/^\/dashboard(?:\/.*)?$/, (_req: Request, res: Response) => {
