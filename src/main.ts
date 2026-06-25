@@ -159,11 +159,12 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
-  const port = process.env.PORT || 2785;
-  await app.listen(port);
+  const port = parseInt(process.env.PORT || '2785', 10);
+  const host = process.env.HOST || '0.0.0.0';
+  await app.listen(port, host);
 
-  console.log(`🚀 OpenWA is running on: http://localhost:${port}`);
-  console.log(`📚 Swagger docs: http://localhost:${port}/api/docs`);
+  console.log(`🚀 OpenWA is running on: http://${host}:${port}`);
+  console.log(`📚 Swagger docs: http://${host}:${port}/api/docs`);
 }
 
 void bootstrap();

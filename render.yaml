@@ -5,7 +5,7 @@ services:
     env: node
     buildCommand: npm install --include=dev && npm run build
     startCommand: node dist/main.js
-    healthCheckPath: /health
+    healthCheckPath: /api/health
     region: ohio
     plan: free
     autoDeploy: true
@@ -13,8 +13,8 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 2785
+      - key: HOST
+        value: 0.0.0.0
       - key: LOG_LEVEL
         value: info
       - key: DATABASE_TYPE
