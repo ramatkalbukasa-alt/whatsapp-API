@@ -79,7 +79,7 @@ function setupDashboard(app: NestExpressApplication): boolean {
   }
 
   app.useStaticAssets(dashboardDistPath, {
-    prefix: '/dashboard/',
+    prefix: '/dashboard',
   });
   console.log('[Bootstrap] Dashboard served from:', dashboardDistPath);
 

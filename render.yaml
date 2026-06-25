@@ -2,9 +2,7 @@ services:
   # Web Service - OpenWA API
   - type: web
     name: openwa-api
-    env: node
-    buildCommand: npm install --include=dev && npm run build
-    startCommand: node dist/main.js
+    env: docker
     healthCheckPath: /api/health
     region: ohio
     plan: free

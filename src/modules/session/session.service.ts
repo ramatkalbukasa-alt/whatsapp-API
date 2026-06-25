@@ -213,7 +213,14 @@ export class SessionService implements OnModuleDestroy, OnModuleInit {
       baseDelay: config?.reconnectBaseDelay ?? 5000,
     });
 
-    await this.initializeEngine(id, session);
+    try {
+      await this.initializeEngine(id, session);
+    } catch (error) {
+      this.engines.delete(id);
+      this.cancelReconnect(id);
+      await this.updateStatus(id, SessionStatus.FAILED);
+      throw error;
+    }
     return this.findOne(id);
   }
 

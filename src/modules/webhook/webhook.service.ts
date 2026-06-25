@@ -59,20 +59,22 @@ export class WebhookService {
       retryCount: dto.retryCount ?? 3,
     });
 
-    return this.webhookRepository.save(webhook);
+    return this.normalizeWebhookEvents(await this.webhookRepository.save(webhook));
   }
 
   async findBySession(sessionId: string): Promise<Webhook[]> {
-    return this.webhookRepository.find({
+    const webhooks = await this.webhookRepository.find({
       where: { sessionId },
       order: { createdAt: 'DESC' },
     });
+    return webhooks.map(webhook => this.normalizeWebhookEvents(webhook));
   }
 
   async findAll(): Promise<Webhook[]> {
-    return this.webhookRepository.find({
+    const webhooks = await this.webhookRepository.find({
       order: { createdAt: 'DESC' },
     });
+    return webhooks.map(webhook => this.normalizeWebhookEvents(webhook));
   }
 
   async findOne(id: string): Promise<Webhook> {
@@ -80,7 +82,7 @@ export class WebhookService {
     if (!webhook) {
       throw new NotFoundException(`Webhook with id '${id}' not found`);
     }
-    return webhook;
+    return this.normalizeWebhookEvents(webhook);
   }
 
   async update(id: string, dto: UpdateWebhookDto): Promise<Webhook> {
@@ -93,7 +95,7 @@ export class WebhookService {
     if (dto.active !== undefined) webhook.active = dto.active;
     if (dto.retryCount !== undefined) webhook.retryCount = dto.retryCount;
 
-    return this.webhookRepository.save(webhook);
+    return this.normalizeWebhookEvents(await this.webhookRepository.save(webhook));
   }
 
   async delete(id: string): Promise<void> {
@@ -157,7 +159,8 @@ export class WebhookService {
       where: { sessionId, active: true },
     });
 
-    const matchingWebhooks = webhooks.filter(w => w.events.includes(event) || w.events.includes('*'));
+    const normalizedWebhooks = webhooks.map(webhook => this.normalizeWebhookEvents(webhook));
+    const matchingWebhooks = normalizedWebhooks.filter(w => w.events.includes(event) || w.events.includes('*'));
 
     // Generate idempotency key (same for all webhooks receiving this event)
     const idempotencyKey = generateIdempotencyKey(event, { ...data, sessionId });
@@ -361,5 +364,32 @@ export class WebhookService {
 
   private delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  private normalizeWebhookEvents(webhook: Webhook): Webhook {
+    const events: unknown = webhook.events;
+
+    if (Array.isArray(events)) {
+      webhook.events = events.filter((event): event is string => typeof event === 'string' && event.length > 0);
+      return webhook;
+    }
+
+    if (typeof events === 'string') {
+      try {
+        const parsed: unknown = JSON.parse(events);
+        webhook.events = Array.isArray(parsed)
+          ? parsed.filter((event): event is string => typeof event === 'string' && event.length > 0)
+          : ['message.received'];
+      } catch {
+        webhook.events = events
+          .split(',')
+          .map(event => event.trim())
+          .filter(Boolean);
+      }
+      return webhook;
+    }
+
+    webhook.events = ['message.received'];
+    return webhook;
   }
 }

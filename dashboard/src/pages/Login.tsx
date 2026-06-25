@@ -8,6 +8,8 @@ interface LoginProps {
   onLogin: (apiKey: string) => void;
 }
 
+const logoUrl = `${import.meta.env.BASE_URL}openwa_logo.webp`;
+
 export function Login({ onLogin }: LoginProps) {
   const { t } = useTranslation();
   const [apiKey, setApiKey] = useState('');
@@ -50,7 +52,7 @@ export function Login({ onLogin }: LoginProps) {
     <div className="login-container">
       <div className="login-card">
         <div className="login-logo">
-          <img src="/openwa_logo.webp" alt="OpenWA" className="logo-icon" />
+          <img src={logoUrl} alt="OpenWA" className="logo-icon" />
           <span className="version-info">
             {t('login.version', {
               version: __APP_VERSION__,
