@@ -10,6 +10,7 @@ import { createLogger } from '../../common/services/logger.service';
 
 const API_KEY_FILE = join(process.cwd(), 'data', '.api-key');
 const ADMIN_API_KEY_ENV = 'OPENWA_ADMIN_API_KEY';
+const API_KEY_PREFIX_LENGTH = 8;
 
 @Injectable()
 export class AuthService implements OnModuleInit {
@@ -21,29 +22,23 @@ export class AuthService implements OnModuleInit {
   ) {}
 
   async onModuleInit(): Promise<void> {
-    // Seed a default API key if none exist
     const count = await this.apiKeyRepository.count();
+    const configuredAdminKey = process.env[ADMIN_API_KEY_ENV]?.trim();
     let displayKey: string;
     let isNewKey = false;
 
-    if (count === 0) {
-      const configuredAdminKey = process.env[ADMIN_API_KEY_ENV]?.trim();
-
-      // Prefer an operator-supplied key for deploys; otherwise use predictable
-      // dev credentials locally and a random key in production.
-      displayKey =
-        configuredAdminKey ||
-        (process.env.NODE_ENV === 'production' ? `owa_k1_${randomBytes(32).toString('hex')}` : 'dev-admin-key');
+    if (configuredAdminKey) {
+      const apiKey = await this.ensureConfiguredAdminKey(configuredAdminKey);
+      displayKey = configuredAdminKey;
+      isNewKey = apiKey.created;
+      this.writeApiKeyFile(displayKey);
+    } else if (count === 0) {
+      // Use predictable dev credentials locally and a random key in production.
+      displayKey = process.env.NODE_ENV === 'production' ? `owa_k1_${randomBytes(32).toString('hex')}` : 'dev-admin-key';
 
       await this.seedApiKey(displayKey, 'Default Admin Key', ApiKeyRole.ADMIN);
       isNewKey = true;
-
-      // Save raw key to file for startup script to read
-      try {
-        writeFileSync(API_KEY_FILE, displayKey, 'utf-8');
-      } catch (err) {
-        this.logger.warn('Could not save API key file', { error: String(err) });
-      }
+      this.writeApiKeyFile(displayKey);
     } else {
       // Read saved API key from file if exists
       if (existsSync(API_KEY_FILE)) {
@@ -83,7 +78,7 @@ export class AuthService implements OnModuleInit {
 
   private async seedApiKey(rawKey: string, name: string, role: ApiKeyRole): Promise<ApiKey> {
     const keyHash = this.hashKey(rawKey);
-    const keyPrefix = rawKey.substring(0, 12);
+    const keyPrefix = rawKey.substring(0, API_KEY_PREFIX_LENGTH);
 
     const apiKey = this.apiKeyRepository.create({
       name,
@@ -95,11 +90,61 @@ export class AuthService implements OnModuleInit {
     return this.apiKeyRepository.save(apiKey);
   }
 
+  private async ensureConfiguredAdminKey(rawKey: string): Promise<{ apiKey: ApiKey; created: boolean }> {
+    const keyHash = this.hashKey(rawKey);
+    const existing = await this.apiKeyRepository.findOne({ where: { keyHash } });
+
+    if (!existing) {
+      const apiKey = await this.seedApiKey(rawKey, 'Configured Admin Key', ApiKeyRole.ADMIN);
+      this.logger.log(`${ADMIN_API_KEY_ENV} synced as an admin API key`, {
+        keyId: apiKey.id,
+        action: 'api_key_synced',
+      });
+      return { apiKey, created: true };
+    }
+
+    let changed = false;
+    if (existing.role !== ApiKeyRole.ADMIN) {
+      existing.role = ApiKeyRole.ADMIN;
+      changed = true;
+    }
+    if (!existing.isActive) {
+      existing.isActive = true;
+      changed = true;
+    }
+    if (existing.expiresAt) {
+      existing.expiresAt = null;
+      changed = true;
+    }
+    if (existing.name !== 'Configured Admin Key') {
+      existing.name = 'Configured Admin Key';
+      changed = true;
+    }
+
+    const apiKey = changed ? await this.apiKeyRepository.save(existing) : existing;
+    if (changed) {
+      this.logger.log(`${ADMIN_API_KEY_ENV} admin API key updated`, {
+        keyId: apiKey.id,
+        action: 'api_key_synced',
+      });
+    }
+
+    return { apiKey, created: false };
+  }
+
+  private writeApiKeyFile(rawKey: string): void {
+    try {
+      writeFileSync(API_KEY_FILE, rawKey, 'utf-8');
+    } catch (err) {
+      this.logger.warn('Could not save API key file', { error: String(err) });
+    }
+  }
+
   async createApiKey(dto: CreateApiKeyDto): Promise<{ apiKey: ApiKey; rawKey: string }> {
     // Generate secure random key: owa_k1_<32 bytes hex>
     const rawKey = `owa_k1_${randomBytes(32).toString('hex')}`;
     const keyHash = this.hashKey(rawKey);
-    const keyPrefix = rawKey.substring(0, 12);
+    const keyPrefix = rawKey.substring(0, API_KEY_PREFIX_LENGTH);
 
     const apiKey = this.apiKeyRepository.create({
       name: dto.name,
