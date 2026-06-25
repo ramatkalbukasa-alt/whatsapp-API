@@ -7,6 +7,7 @@ import { ShutdownService } from './common/services/shutdown.service';
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 import * as path from 'path';
+import type { NextFunction, Request, Response } from 'express';
 
 // Configuration loading order (later sources do NOT override earlier ones):
 //   1. Process env (Docker, shell, systemd) — highest priority
@@ -122,6 +123,14 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'X-API-Key', 'Authorization', 'X-Request-ID'],
     exposedHeaders: ['X-RateLimit-Limit', 'X-RateLimit-Remaining', 'X-RateLimit-Reset'],
     maxAge: 86400, // 24 hours
+  });
+
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    if (req.path === '/') {
+      return res.redirect('/api/docs');
+    }
+
+    next();
   });
 
   // Global prefix
