@@ -70,7 +70,12 @@ export function Login({ onLogin }: LoginProps) {
                 placeholder={t('login.apiKeyPlaceholder')}
                 className={error ? 'error' : ''}
               />
-              <button type="button" className="toggle-visibility" onClick={() => setShowKey(!showKey)}>
+              <button
+                type="button"
+                className="toggle-visibility"
+                onClick={() => setShowKey(!showKey)}
+                aria-label={showKey ? 'Hide API key' : 'Show API key'}
+              >
                 {showKey ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>

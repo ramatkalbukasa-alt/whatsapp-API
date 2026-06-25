@@ -166,11 +166,17 @@ export function Layout({ onLogout, userRole }: LayoutProps) {
             className="theme-toggle-btn"
             onClick={toggleTheme}
             title={t('theme.label', { value: themeLabel })}
+            aria-label={t('theme.label', { value: themeLabel })}
           >
             <ThemeIcon size={18} />
             {!isCollapsed && <span>{themeLabel}</span>}
           </button>
-          <button className="logout-btn" onClick={onLogout} title={isCollapsed ? t('common.logout') : undefined}>
+          <button
+            className="logout-btn"
+            onClick={onLogout}
+            title={isCollapsed ? t('common.logout') : undefined}
+            aria-label={t('common.logout')}
+          >
             <LogOut size={20} />
             {!isCollapsed && <span>{t('common.logout')}</span>}
           </button>

@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { webhookApi, type Webhook } from '../services/api';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
-import { useRole } from '../hooks/useRole';
+import { useRole } from '../hooks/role-context';
 import {
   useWebhooksQuery,
   useSessionsQuery,

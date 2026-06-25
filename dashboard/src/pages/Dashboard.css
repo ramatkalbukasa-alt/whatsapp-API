@@ -41,7 +41,7 @@
 .stat-card {
   position: relative;
   background: var(--bg-white);
-  border-radius: 12px;
+  border-radius: var(--radius);
   padding: 1.5rem;
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--border);
@@ -122,7 +122,7 @@
 
 .sessions-section {
   background: var(--bg-white);
-  border-radius: 12px;
+  border-radius: var(--radius);
   padding: 1.5rem;
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--border);
@@ -187,7 +187,7 @@
 }
 
 .session-id {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.8125rem;
   color: var(--text-primary);
   white-space: nowrap;
@@ -286,16 +286,17 @@
     gap: 1rem;
   }
 
-  .table-header,
-  .table-row {
+  .sessions-table .table-header,
+  .sessions-table .table-row {
     grid-template-columns: 1fr 1fr 1fr;
     font-size: 0.8125rem;
+    padding: 0.875rem 1rem;
   }
 
-  .table-header span:nth-child(4),
-  .table-header span:nth-child(5),
-  .table-row > *:nth-child(4),
-  .table-row > *:nth-child(5) {
+  .sessions-table .table-header span:nth-child(4),
+  .sessions-table .table-header span:nth-child(5),
+  .sessions-table .table-row > *:nth-child(4),
+  .sessions-table .table-row > *:nth-child(5) {
     display: none;
   }
 }

@@ -1,6 +1,9 @@
 .layout {
   display: flex;
   min-height: 100vh;
+  background:
+    linear-gradient(135deg, rgba(37, 211, 102, 0.08), transparent 28%),
+    var(--bg-light);
 }
 
 /* ==================== Sidebar ==================== */
@@ -59,7 +62,7 @@
   font-size: 1.125rem;
   font-weight: 800;
   color: var(--text-primary);
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
 }
 
 .brand-subtitle {
@@ -149,6 +152,7 @@
 .nav-item.active {
   background: rgba(37, 211, 102, 0.1);
   color: var(--primary);
+  box-shadow: inset 3px 0 0 var(--primary);
 }
 
 .nav-item.active svg {
@@ -368,5 +372,15 @@
   [dir="rtl"] .main-content,
   [dir="rtl"] .main-content.mobile {
     margin-right: 0;
+  }
+
+  [dir="rtl"] .sidebar.mobile {
+    transform: translateX(100%);
+    right: 0;
+    left: auto;
+  }
+
+  [dir="rtl"] .sidebar.mobile.open {
+    transform: translateX(0);
   }
 }

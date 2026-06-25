@@ -4,7 +4,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { Layout } from './components/Layout';
 import { ToastProvider } from './components/Toast';
-import { RoleProvider, useRole, type UserRole } from './hooks/useRole';
+import { RoleProvider, type UserRole } from './hooks/useRole';
+import { useRole } from './hooks/role-context';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import './App.css';
 

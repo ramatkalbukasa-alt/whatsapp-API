@@ -5,7 +5,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: var(--bg-light);
+  background:
+    linear-gradient(135deg, rgba(37, 211, 102, 0.12), transparent 32%),
+    linear-gradient(315deg, rgba(20, 184, 166, 0.12), transparent 30%),
+    var(--bg-light);
   padding: 2rem;
   position: fixed;
   top: 0;
@@ -22,6 +25,7 @@
   width: 100%;
   max-width: 420px;
   text-align: center;
+  border: 1px solid var(--border);
 }
 
 .login-logo {
