@@ -44,6 +44,7 @@
     "collapse": "Collapse",
     "logout": "Logout",
     "refresh": "Refresh",
+    "copy": "Copy",
     "errorGeneric": "An error occurred",
     "unknownError": "Unknown error"
   },
@@ -55,6 +56,7 @@
   },
   "nav": {
     "dashboard": "Dashboard",
+    "quickStart": "Quick Start",
     "sessions": "Sessions",
     "webhooks": "Webhooks",
     "apiKeys": "API Keys",
@@ -113,6 +115,33 @@
     "qr_ready": "Scan QR",
     "ready": "Connected",
     "disconnected": "Disconnected"
+  },
+  "quickStart": {
+    "title": "Quick Start",
+    "subtitle": "Create, start, and connect a WhatsApp session from one focused workflow",
+    "progress": "Connection progress",
+    "sessionName": "Session name",
+    "sessionPlaceholder": "e.g., test-bot",
+    "createSession": "Create Session",
+    "startSession": "Start Session",
+    "currentSession": "Current session",
+    "qrTitle": "QR Connection",
+    "qrAlt": "WhatsApp connection QR code",
+    "qrEmpty": "Create and start a session to generate a QR code",
+    "curlTitle": "Equivalent curl",
+    "copied": "Copied",
+    "steps": {
+      "key": "API key",
+      "create": "Create",
+      "start": "Start",
+      "scan": "Scan"
+    },
+    "errors": {
+      "nameRequired": "Enter a session name first.",
+      "unauthorized": "API key is missing or invalid. Log in again with your Render admin key.",
+      "forbidden": "This API key does not have operator permissions for session setup.",
+      "conflict": "A session with this name already exists. Use another name or open Sessions."
+    }
   },
   "sessions": {
     "title": "Sessions",
