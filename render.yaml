@@ -17,6 +17,8 @@ services:
         value: 0.0.0.0
       - key: LOG_LEVEL
         value: info
+      - key: OPENWA_ADMIN_API_KEY
+        sync: false
       - key: DATABASE_TYPE
         value: postgres
       - key: DATABASE_SYNCHRONIZE

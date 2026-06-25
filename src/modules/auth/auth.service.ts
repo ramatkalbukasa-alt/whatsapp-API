@@ -9,6 +9,7 @@ import { CreateApiKeyDto, UpdateApiKeyDto } from './dto';
 import { createLogger } from '../../common/services/logger.service';
 
 const API_KEY_FILE = join(process.cwd(), 'data', '.api-key');
+const ADMIN_API_KEY_ENV = 'OPENWA_ADMIN_API_KEY';
 
 @Injectable()
 export class AuthService implements OnModuleInit {
@@ -26,9 +27,13 @@ export class AuthService implements OnModuleInit {
     let isNewKey = false;
 
     if (count === 0) {
-      // Use predictable key in development, random key in production
+      const configuredAdminKey = process.env[ADMIN_API_KEY_ENV]?.trim();
+
+      // Prefer an operator-supplied key for deploys; otherwise use predictable
+      // dev credentials locally and a random key in production.
       displayKey =
-        process.env.NODE_ENV === 'production' ? `owa_k1_${randomBytes(32).toString('hex')}` : 'dev-admin-key';
+        configuredAdminKey ||
+        (process.env.NODE_ENV === 'production' ? `owa_k1_${randomBytes(32).toString('hex')}` : 'dev-admin-key');
 
       await this.seedApiKey(displayKey, 'Default Admin Key', ApiKeyRole.ADMIN);
       isNewKey = true;

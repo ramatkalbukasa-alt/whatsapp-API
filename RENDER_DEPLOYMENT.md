@@ -81,6 +81,7 @@ STORAGE_PATH=/app/data/media
 
 # API
 API_PORT=2785
+OPENWA_ADMIN_API_KEY=owa_k1_change_me_to_a_long_random_secret
 CORS_ORIGINS=*
 RATE_LIMIT_MAX=100
 
@@ -94,6 +95,8 @@ WEBHOOK_RETRY_DELAY=5000
 ```
 
 **Important** : Les variables `DATABASE_URL` et `REDIS_URL` sont auto-générées par Render lors de la création des services. Vous n'avez pas besoin de les ajouter manuellement.
+
+`OPENWA_ADMIN_API_KEY` est utilisée uniquement quand aucune clé API n'existe encore en base. Si votre service Render a déjà seedé une clé et que vous ne connaissez plus sa valeur brute, créez une nouvelle clé depuis une clé admin existante ou réinitialisez les données d'authentification avant de redéployer.
 
 ### Étape 5 : Connecter les services
 
@@ -146,8 +149,7 @@ Response attendue : `{"status":"ok"}`
 ### 2️⃣ Configurer l'authentification API
 Dans votre `.env` :
 ```env
-API_KEY_REQUIRED=true
-MASTER_API_KEY=<generate-strong-key>
+OPENWA_ADMIN_API_KEY=<generate-strong-key>
 ```
 
 ### 3️⃣ Activer CIDR Whitelisting (optionnel)
